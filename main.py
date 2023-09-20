@@ -13,7 +13,8 @@ screen = pygame.display.set_mode((tamano_bloque * numero_bloque,
 # Que tan rápido corre el juego
 clock = pygame.time.Clock()
 
-manzana = Manzana()
+# Inicializo la manzana con los numeros de bloques
+manzana = Manzana(numero_bloque)
 
 while True:
      # dibujar todos los elementos
