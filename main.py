@@ -31,7 +31,12 @@ class Main:
         if self.manzana.pos == self.culebra.cuerpo[0]:
             self.manzana.aparecer(numero_bloque)
             self.culebra.agregar_bloque()
-
+        
+        # Se asegura que nunca aparezca una manzana en el cuerpo
+        # de la culebra
+        for bloque in self.culebra.cuerpo[1:]:
+            if bloque == self.manzana.pos:
+                self.manzana.aparecer(numero_bloque)
 
     def restricciones_culebra(self, numero_bloque):
         # Revisa si la cabeza de la culebra se sale de la
@@ -46,8 +51,7 @@ class Main:
                 self.juego_terminado()
 
     def juego_terminado(self):
-        pygame.quit()
-        sys.exit()
+        self.culebra.reset()
 
 
 pygame.init()

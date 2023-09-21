@@ -37,3 +37,4 @@ class Manzana:
         self.x = random.randint(0, numero_bloque - 1)
         self.y = random.randint(0, numero_bloque - 1)
         self.pos = Vector2(self.x,self.y)
+        

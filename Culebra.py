@@ -64,3 +64,6 @@ class Culebra:
         de nuevo bloque cambiar a veradero, afectando la función mov_culebra."""
         self.nuevo_bloque = True
 
+    def reset(self):
+        self.cuerpo = [ Vector2(5,10), Vector2(4, 10), Vector2(3, 10) ]
+
