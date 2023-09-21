@@ -7,6 +7,7 @@ class Culebra:
     def __init__(self):
         self.cuerpo = [ Vector2(5,10), Vector2(6, 10), Vector2(7, 10) ]
         self.direccion = Vector2(1,0)
+        self.nuevo_bloque = False
 
 
     def dibujar_culebra(self, tamano_bloque:int,
@@ -39,9 +40,27 @@ class Culebra:
         Después se hace una copia del cuerpo (sin tener en 
         cuenta la cola) y se añade a la cabeza.
         """
-        # Copia del cuerpo sin la cola
-        copia_cuerpo = self.cuerpo[:-1]
-        # Se añade la cabeza al cuerpo, con su nueva dirección
-        copia_cuerpo.insert(0, copia_cuerpo[0] + self.direccion)
-        # Actualizar el cuerpo
-        self.cuerpo = copia_cuerpo[:]
+        if self.nuevo_bloque == True:
+            # Copia del cuerpo sin la cola
+            copia_cuerpo = self.cuerpo[:]
+            # Se añade la cabeza al cuerpo, con su nueva dirección
+            copia_cuerpo.insert(0, copia_cuerpo[0] + self.direccion)
+            # Actualizar el cuerpo
+            self.cuerpo = copia_cuerpo[:]
+            # Sin esto, la culebra crece indefinidamente
+            self.nuevo_bloque = False
+        else:
+            # Copia del cuerpo sin la cola
+            copia_cuerpo = self.cuerpo[:-1]
+            # Se añade la cabeza al cuerpo, con su nueva dirección
+            copia_cuerpo.insert(0, copia_cuerpo[0] + self.direccion)
+            # Actualizar el cuerpo
+            self.cuerpo = copia_cuerpo[:]
+            
+
+    def agregar_bloque(self):
+        """Funcion para cambiar el estado de nuevo bloque. De manera
+        automática es falso, cuando se quiera agregar el bloque, el estado
+        de nuevo bloque cambiar a veradero, afectando la función mov_culebra."""
+        self.nuevo_bloque = True
+

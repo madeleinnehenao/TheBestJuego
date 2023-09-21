@@ -5,14 +5,7 @@ from pygame.math import Vector2
 
 class Manzana:
     def __init__(self, numero_bloque: int):
-        """ Genera aleatoriamente una manzana
-        args:
-        numero_bloque:Int. Cantidad de bloques que hay en la 
-        matriz."""
-        # la resta asegura que siempre estemos en la pantalla
-        self.x = random.randint(0, numero_bloque - 1)
-        self.y = random.randint(0, numero_bloque - 1)
-        self.pos = Vector2(self.x,self.y)
+        self.aparecer(numero_bloque)
 
     def dibujar_manzana(self, tamano_bloque:int,
                         pantalla:object) ->None:
@@ -32,3 +25,15 @@ class Manzana:
                                    tamano_bloque, tamano_bloque)
 
         pygame.draw.rect(pantalla, (126,166, 114), manzana_rect)
+
+
+    def aparecer(self, numero_bloque: int):
+        """Crea una posición aleatoria dentro de la matriz,
+        en la cual aparecerá la manzana
+        
+        args:
+        numero_bloque: int. Cantidad de bloques que hay en la 
+        matriz."""
+        self.x = random.randint(0, numero_bloque - 1)
+        self.y = random.randint(0, numero_bloque - 1)
+        self.pos = Vector2(self.x,self.y)
