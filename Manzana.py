@@ -1,5 +1,6 @@
-import pygame
+"""Modulo con todo lo referente a la clase Manzana"""
 import random
+import pygame
 from pygame.math import Vector2
 
 class Manzana:
@@ -13,7 +14,8 @@ class Manzana:
         self.y = random.randint(0, numero_bloque - 1)
         self.pos = Vector2(self.x,self.y)
 
-    def dibujar_manzana(self, tamano_bloque:int, pantalla:object):
+    def dibujar_manzana(self, tamano_bloque:int,
+                        pantalla:object) ->None:
         """Crea un rectángulo y dibuja el 
         rectángulo en la pantalla
         
