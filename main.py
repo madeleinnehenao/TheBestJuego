@@ -58,7 +58,7 @@ pygame.init()
 
 # Matriz de tamaño
 tamano_bloque = 30
-numero_bloque = 20
+numero_bloque = 13
 # Surface de inicio
 screen = pygame.display.set_mode((tamano_bloque * numero_bloque,
                                   tamano_bloque * numero_bloque))
