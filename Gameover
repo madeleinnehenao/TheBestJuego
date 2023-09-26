@@ -1,0 +1,44 @@
+import pygame
+import sys
+
+# Inicializar Pygame
+pygame.init()
+
+# Configurar la ventana
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+
+# Configurar la fuente y el color
+font = pygame.font.Font(None, 74)
+text_color = (148, 0, 211)  # RGB para morado
+
+# Estado del juego
+game_over = False
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if game_over and event.key == pygame.K_r:
+                game_over = False
+
+    screen.fill((0, 0, 0))  # Rellenar la pantalla con negro
+
+    if game_over:
+        # Renderizar el texto "GAME OVER"
+        text = font.render("GAME OVER", True, text_color)
+        text_rect = text.get_rect(center=(width/2, height/2))
+        screen.blit(text, text_rect)
+
+        # Renderizar el texto "Press R to Play Again"
+        replay_text = font.render("Press R to Play Again", True, text_color)
+        replay_text_rect = replay_text.get_rect(center=(width/2, height/2 + 100))
+        screen.blit(replay_text, replay_text_rect)
+    else:
+        # Aquí va la lógica del juego
+        pass
+
+    # Actualizar la pantalla
+    pygame.display.flip()
