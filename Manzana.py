@@ -32,8 +32,7 @@ class Manzana:
         en la cual aparecerá la manzana
         
         args:
-        numero_bloque: int. Cantidad de bloques que hay en la 
-        matriz."""
+        numero_bloque: int. Cantidad de bloques que hay en la matriz."""
         self.x = random.randint(0, numero_bloque - 1)
         self.y = random.randint(0, numero_bloque - 1)
         self.pos = Vector2(self.x,self.y)

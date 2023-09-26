@@ -40,7 +40,7 @@ class Culebra:
         Después se hace una copia del cuerpo (sin tener en 
         cuenta la cola) y se añade a la cabeza.
         """
-        if self.nuevo_bloque == True:
+        if self.nuevo_bloque:
             # Copia del cuerpo sin la cola
             copia_cuerpo = self.cuerpo[:]
             # Se añade la cabeza al cuerpo, con su nueva dirección
@@ -65,6 +65,8 @@ class Culebra:
         self.nuevo_bloque = True
 
     def reset(self):
+        """Función para reposicionar a la culebra, reiniciando su dirección."""
+        
         self.cuerpo = [ Vector2(5,10), Vector2(4, 10), Vector2(3, 10) ]
         self.direccion = Vector2(0,0)
 

@@ -5,18 +5,36 @@ from Manzana import Manzana
 from Culebra import Culebra
 
 class Main:
+    """    
+    Clase donde se aloja la lógica del juego.
+    Se encarga de realizar los dibujos con base en los métodos de las 
+    clases Culebra y Manzana. Además de actualizar, manejar las colisiones,
+    como se termina el juego y las restricciones de movimieno de la culebra
+    """
     def __init__(self):
         self.culebra = Culebra()
         self.manzana = Manzana(numero_bloque)
 
 
     def actualizar(self):
+        """
+        Esta función se encarga de actualizar los movimientos de la culebra,
+        teniendo en cuenta la colision con la manzana, además de 
+        las restricciones del tablero para la culebra"""
         self.culebra.mov_culebra()
         self.encuentro()
         self.restricciones_culebra(numero_bloque)
 
     
     def dibujar_elementos(self, bloque_tamano:int, pantalla:object):
+        """
+        Esta función se encarga de dibujar la culebra y 
+        la manzana en la pantalla
+
+        args:
+        numero_bloque: int. Cantidad de bloques que hay en la matriz.
+        pantalla: object. Pantalla donde serán dibujados los elementos.
+        """
         # Dibujar la manzana
         self.manzana.dibujar_manzana(bloque_tamano, pantalla)
         # Dibujar la culebra
@@ -39,6 +57,14 @@ class Main:
                 self.manzana.aparecer(numero_bloque)
 
     def restricciones_culebra(self, numero_bloque):
+        """
+        Esta función se encarga de delimitar los movimientos de la
+        culebra en la pantalla.
+
+        args:
+        numero_bloque: int. Cantidad de bloques que hay en la matriz.
+
+        """
         # Revisa si la cabeza de la culebra se sale de la
         # pantalla en el límite izquierda o derecha, además de arriba
         # y abajo.
@@ -46,6 +72,8 @@ class Main:
             or not 0 <= self.culebra.cuerpo[0].y < numero_bloque ):
             self.juego_terminado()
         
+        # Termina el juego cuando la cabeza de la culebra 
+        # choca con su cuerpo
         for bloque in self.culebra.cuerpo[1:]:
             if bloque == self.culebra.cuerpo[0]:
                 self.juego_terminado()
