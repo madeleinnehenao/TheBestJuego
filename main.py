@@ -77,6 +77,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+            
         # Mover la culebra automáticamente
         if event.type == ACTUALIZAR_SCREEN:
             main_game.actualizar()
