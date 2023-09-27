@@ -81,7 +81,6 @@ class Main:
     def juego_terminado(self):
         self.culebra.reset()
 
-
 pygame.init()
 
 # Matriz de tamaño
@@ -93,7 +92,6 @@ screen = pygame.display.set_mode((tamano_bloque * numero_bloque,
 # Que tan rápido corre el juego
 clock = pygame.time.Clock()
 main_game = Main()
-
 # Actualizar el input de un jugador cada 150ms
 ACTUALIZAR_SCREEN = pygame.USEREVENT
 pygame.time.set_timer(ACTUALIZAR_SCREEN, 150)
