@@ -15,7 +15,7 @@ color = (255, 0, 255)  # RGB para morado
 
 # Crear los textos
 text_big = font_big.render("PLAY GAME", True, color)
-text_small = font_small.render("Para jugar utiliza las letras W-A-S-D", True, color)
+text_small = font_small.render("Para jugar utiliza las teclas W-A-S-D", True, color)
 
 # Obtener las posiciones centradas para los textos
 position_big = text_big.get_rect(center=(size[0]/2, size[1]/2 - 50))
