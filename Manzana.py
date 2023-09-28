@@ -26,7 +26,7 @@ class Manzana(pygame.sprite.Sprite):
                                     self.pos.y * tamano_bloque,
                                     tamano_bloque, tamano_bloque)
 
-        pygame.draw.rect(pantalla, (126,166, 114), manzana_rect)
+        pygame.draw.rect(pantalla, (220, 0, 0), manzana_rect)
 
     # Generar posicion aleatoria
     def aparecer(self, numero_bloque: int):
@@ -41,5 +41,3 @@ class Manzana(pygame.sprite.Sprite):
 
             
 
-    
-    
