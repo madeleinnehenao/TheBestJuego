@@ -3,6 +3,7 @@ import pygame
 from pygame.math import Vector2
 from Manzana import Manzana
 from Culebra import Culebra
+import random
 
 class Main:
     """    
@@ -11,9 +12,12 @@ class Main:
     clases Culebra y Manzana. Además de actualizar, manejar las colisiones,
     como se termina el juego y las restricciones de movimieno de la culebra
     """
+
     def __init__(self):
         self.culebra = Culebra()
         self.manzana = Manzana(numero_bloque)
+        self.count=0
+        self.aleatorio = 0
 
 
     def actualizar(self):
@@ -22,8 +26,16 @@ class Main:
         teniendo en cuenta la colision con la manzana, además de 
         las restricciones del tablero para la culebra"""
         self.culebra.mov_culebra()
+
+        if self.count == self.aleatorio:
+            self.manzana.visible = True
+            self.generar_cont_ale()
+
         self.encuentro()
         self.restricciones_culebra(numero_bloque)
+
+        if self.count == 10:
+            self.count = 0 
 
     
     def dibujar_elementos(self, bloque_tamano:int, pantalla:object):
@@ -36,7 +48,8 @@ class Main:
         pantalla: object. Pantalla donde serán dibujados los elementos.
         """
         # Dibujar la manzana
-        self.manzana.dibujar_manzana(bloque_tamano, pantalla)
+        if self.manzana.visible:
+            self.manzana.dibujar_manzana(bloque_tamano, pantalla)
         # Dibujar la culebra
         self.culebra.dibujar_culebra(bloque_tamano, pantalla)
 
@@ -47,13 +60,15 @@ class Main:
         aparece una nueva manzana y a la culebra crece en tamaño"""
 
         if self.manzana.pos == self.culebra.cuerpo[0]:
-            self.manzana.aparecer(numero_bloque)
+            self.manzana.visible = False
             self.culebra.agregar_bloque()
-        
+            self.manzana.aparecer(numero_bloque)
+                
         # Se asegura que nunca aparezca una manzana en el cuerpo
         # de la culebra
         for bloque in self.culebra.cuerpo[1:]:
             if bloque == self.manzana.pos:
+                self.manzana.visible = False
                 self.manzana.aparecer(numero_bloque)
 
     def restricciones_culebra(self, numero_bloque):
@@ -80,7 +95,11 @@ class Main:
 
     def juego_terminado(self):
         self.culebra.reset()
-
+    
+    def generar_cont_ale(self):
+        self.aleatorio = random.randint(0,10)
+    
+    #funcion para desaparecer la manzana
 
 pygame.init()
 
@@ -118,18 +137,22 @@ while True:
                 # permitir el cambio de dirección hacia arriba
                 if main_game.culebra.direccion.y != 1:
                     main_game.culebra.direccion = Vector2(0, -1)
+                    main_game.count += 1
             # Hacia la izquierda
             if event.key == pygame.K_a:
                 # Si la culebra está yendo hacia la derecha
                 # que no pueda devolverse en ella misma
                 if main_game.culebra.direccion.x != 1:
                     main_game.culebra.direccion = Vector2(-1, 0)
+                    main_game.count += 1
+                    
             # Hacia la derecha
             if event.key == pygame.K_d:
                 # Si la culebra está yendo hacia la derecha
                 # que no pueda devolverse en ella misma
                 if main_game.culebra.direccion.x != -1:
                     main_game.culebra.direccion = Vector2(1, 0)
+                    main_game.count += 1
             # Hacia abajo
             if event.key == pygame.K_s:
                 # Revisa que previamente la culebra no se
@@ -137,10 +160,13 @@ while True:
                 # permitir el cambio de dirección hacia abajo
                 if main_game.culebra.direccion.y != -1:
                     main_game.culebra.direccion = Vector2(0, 1)
+                    main_game.count += 1
     # Color del fondo
     screen.fill((175,215,70))
     # Dibujar la manzan y culebra
     main_game.dibujar_elementos(tamano_bloque, screen)
+    print(main_game.count)
+    print("Aleatorio: ", main_game.aleatorio)
     pygame.display.update()
     # 60 'fps'
     clock.tick(60)
