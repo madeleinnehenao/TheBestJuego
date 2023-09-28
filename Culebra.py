@@ -41,10 +41,10 @@ class Culebra:
         cuenta la cola) y se añade a la cabeza.
         """
         if self.nuevo_bloque:
-            # Copia del cuerpo sin la cola
+            # Copia del cuerpo 
             copia_cuerpo = self.cuerpo[:]
             # Se añade la cabeza al cuerpo, con su nueva dirección
-            copia_cuerpo.insert(0, copia_cuerpo[0] + self.direccion)
+            copia_cuerpo.insert(-1, copia_cuerpo[-1])
             # Actualizar el cuerpo
             self.cuerpo = copia_cuerpo[:]
             # Sin esto, la culebra crece indefinidamente
