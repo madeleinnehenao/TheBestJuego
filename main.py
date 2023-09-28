@@ -162,11 +162,9 @@ while True:
                     main_game.culebra.direccion = Vector2(0, 1)
                     main_game.count += 1
     # Color del fondo
-    screen.fill((175,215,70))
+    screen.fill((255, 250, 205))
     # Dibujar la manzan y culebra
     main_game.dibujar_elementos(tamano_bloque, screen)
-    print(main_game.count)
-    print("Aleatorio: ", main_game.aleatorio)
     pygame.display.update()
     # 60 'fps'
     clock.tick(60)
