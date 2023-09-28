@@ -25,11 +25,14 @@ class Culebra:
         """
         for bloque in self.cuerpo:
             # Crear un rectángulo
+
             bloque_rect = pygame.Rect(bloque.x * tamano_bloque,
                                       bloque.y * tamano_bloque,
                                       tamano_bloque, tamano_bloque)
             # Dibujar el rectángulo de la culebra
-            pygame.draw.rect(pantalla, (183, 111, 121), bloque_rect)
+            pygame.draw.rect(pantalla, (204, 102, 0), bloque_rect)
+            if bloque == self.cuerpo[0]:
+                pygame.draw.rect(pantalla, (255, 255, 0), bloque_rect)
 
 
     def mov_culebra(self) -> None:
@@ -69,4 +72,3 @@ class Culebra:
         
         self.cuerpo = [ Vector2(5,10), Vector2(4, 10), Vector2(3, 10) ]
         self.direccion = Vector2(0,0)
-
