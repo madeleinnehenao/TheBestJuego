@@ -16,8 +16,9 @@ class Main:
     def __init__(self):
         self.culebra = Culebra()
         self.manzana = Manzana(numero_bloque)
-        self.count=0
+        self.count = 0
         self.aleatorio = 0
+        self.estado = "intro"
 
 
     def actualizar(self):
@@ -71,6 +72,7 @@ class Main:
                 self.manzana.visible = False
                 self.manzana.aparecer(numero_bloque)
 
+
     def restricciones_culebra(self, numero_bloque):
         """
         Esta función se encarga de delimitar los movimientos de la
@@ -92,14 +94,108 @@ class Main:
         for bloque in self.culebra.cuerpo[1:]:
             if bloque == self.culebra.cuerpo[0]:
                 self.juego_terminado()
+                
 
     def juego_terminado(self):
         self.culebra.reset()
-    
+         
+
     def generar_cont_ale(self):
         self.aleatorio = random.randint(0,10)
+
+
+    def intro(self, tamano_bloque, numero_bloque):
+        
+        size = [tamano_bloque * numero_bloque,
+                tamano_bloque * numero_bloque]
+                # Configurar la fuente y el color
+        font_big = pygame.font.Font(None, 72)
+        font_small = pygame.font.Font(None, 24)
+        color = (255, 0, 255)  # RGB para morado
+
+        # Crear los textos
+        text_big = font_big.render("LA CULEBRITA", True, color)
+        text_small = font_small.render("Para jugar utiliza las teclas W-A-S-D", True, color)
+        text_enter = font_small.render("PRESIONE ENTER PARA JUGAR", True, color)
+
+        # Obtener las posiciones centradas para los textos
+        position_big = text_big.get_rect(center=(size[0] / 2, size[1] / 2 - 50))
+        position_small = text_small.get_rect(center=(size[0] / 2, size[1] / 2 + 50))
+        position_enter = text_enter.get_rect(center=(size[0] / 2, size[1] / 2 + 100))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Se presionó Enter
+                    self.estado = "main_game"
+
+            if self.estado == "intro":
+                # Rellenar la pantalla con negro
+                screen.fill((0, 0, 0))
+
+                # Dibujar los textos
+                screen.blit(text_big, position_big)
+                screen.blit(text_small, position_small)
+                screen.blit(text_enter, position_enter)
+
+                # Actualizar la pantalla
+                pygame.display.flip()
+
+
+    def main_game_screen(self):
+        # dibujar todos los elementos
+        if self.estado == "main_game":
+            for event in pygame.event.get():
+                # Cerrar el juego
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                    
+                # Mover la culebra automáticamente
+                if event.type == ACTUALIZAR_SCREEN:
+                    main_game.actualizar()
+                # Según el input, modificar dirección
+                if event.type == pygame.KEYDOWN:
+                    # Hacia arriba
+                    if event.key == pygame.K_w:
+                        # Revisa que previamente la culebra no se
+                        # estuviera moviendo hacia abajo para
+                        # permitir el cambio de dirección hacia arriba
+                        if main_game.culebra.direccion.y != 1:
+                            main_game.culebra.direccion = Vector2(0, -1)
+                            main_game.count += 1
+                    # Hacia la izquierda
+                    if event.key == pygame.K_a:
+                        # Si la culebra está yendo hacia la derecha
+                        # que no pueda devolverse en ella misma
+                        if main_game.culebra.direccion.x != 1:
+                            main_game.culebra.direccion = Vector2(-1, 0)
+                            main_game.count += 1
+                            
+                    # Hacia la derecha
+                    if event.key == pygame.K_d:
+                        # Si la culebra está yendo hacia la derecha
+                        # que no pueda devolverse en ella misma
+                        if main_game.culebra.direccion.x != -1:
+                            main_game.culebra.direccion = Vector2(1, 0)
+                            main_game.count += 1
+                    # Hacia abajo
+                    if event.key == pygame.K_s:
+                        # Revisa que previamente la culebra no se
+                        # estuviera moviendo hacia arriba para
+                        # permitir el cambio de dirección hacia abajo
+                        if main_game.culebra.direccion.y != -1:
+                            main_game.culebra.direccion = Vector2(0, 1)
+                            main_game.count += 1
+            # Color del fondo
+            screen.fill((255, 250, 205))
+            # Dibujar la manzan y culebra
+            main_game.dibujar_elementos(tamano_bloque, screen)
+
+            pygame.display.update()
     
-    #funcion para desaparecer la manzana
 
 pygame.init()
 
@@ -118,53 +214,9 @@ ACTUALIZAR_SCREEN = pygame.USEREVENT
 pygame.time.set_timer(ACTUALIZAR_SCREEN, 150)
 
 while True:
-     # dibujar todos los elementos
-    for event in pygame.event.get():
-        # Cerrar el juego
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-            
-        # Mover la culebra automáticamente
-        if event.type == ACTUALIZAR_SCREEN:
-            main_game.actualizar()
-        # Según el input, modificar dirección
-        if event.type == pygame.KEYDOWN:
-            # Hacia arriba
-            if event.key == pygame.K_w:
-                # Revisa que previamente la culebra no se
-                # estuviera moviendo hacia abajo para
-                # permitir el cambio de dirección hacia arriba
-                if main_game.culebra.direccion.y != 1:
-                    main_game.culebra.direccion = Vector2(0, -1)
-                    main_game.count += 1
-            # Hacia la izquierda
-            if event.key == pygame.K_a:
-                # Si la culebra está yendo hacia la derecha
-                # que no pueda devolverse en ella misma
-                if main_game.culebra.direccion.x != 1:
-                    main_game.culebra.direccion = Vector2(-1, 0)
-                    main_game.count += 1
-                    
-            # Hacia la derecha
-            if event.key == pygame.K_d:
-                # Si la culebra está yendo hacia la derecha
-                # que no pueda devolverse en ella misma
-                if main_game.culebra.direccion.x != -1:
-                    main_game.culebra.direccion = Vector2(1, 0)
-                    main_game.count += 1
-            # Hacia abajo
-            if event.key == pygame.K_s:
-                # Revisa que previamente la culebra no se
-                # estuviera moviendo hacia arriba para
-                # permitir el cambio de dirección hacia abajo
-                if main_game.culebra.direccion.y != -1:
-                    main_game.culebra.direccion = Vector2(0, 1)
-                    main_game.count += 1
-    # Color del fondo
-    screen.fill((255, 250, 205))
-    # Dibujar la manzan y culebra
-    main_game.dibujar_elementos(tamano_bloque, screen)
-    pygame.display.update()
+    if main_game.estado == "intro":
+        main_game.intro(tamano_bloque, numero_bloque)
+    elif main_game.estado == "main_game":
+        main_game.main_game_screen()
     # 60 'fps'
     clock.tick(60)
