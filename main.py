@@ -8,9 +8,12 @@ import random
 class Main:
     """    
     Clase donde se aloja la lógica del juego.
+
     Se encarga de realizar los dibujos con base en los métodos de las 
     clases Culebra y Manzana. Además de actualizar, manejar las colisiones,
-    como se termina el juego y las restricciones de movimieno de la culebra
+    como se termina el juego y las restricciones de movimieno de la culebra.
+
+    También realiza el manejo de pantallas de introducción y del juego principal.
     """
 
     def __init__(self):
@@ -23,9 +26,25 @@ class Main:
 
     def actualizar(self):
         """
-        Esta función se encarga de actualizar los movimientos de la culebra,
-        teniendo en cuenta la colision con la manzana, además de 
-        las restricciones del tablero para la culebra"""
+        Actualiza los movimientos de la culebra en el juego, considerando colisiones con la manzana
+        y restricciones del tablero.
+
+        Esta función se llama en el bucle principal del juego para actualizar el movimiento de la culebra.
+        Realiza las siguientes acciones:
+        - Llama a la función 'mov_culebra()' para actualizar la posición de la culebra.
+        - Comprueba si el contador 'count' es igual al valor aleatorio 'aleatorio'. Si es así, muestra
+        la manzana en el juego y genera un nuevo valor aleatorio llamando a 'generar_cont_ale()'.
+        - Llama a la función 'encuentro()' para verificar si la culebra ha colisionado con la manzana y
+        tomar las acciones correspondientes, como hacer crecer la culebra y generar una nueva posición
+        para la manzana.
+        - Aplica restricciones al movimiento de la culebra para asegurarse de que no salga del tablero
+        llamando a 'restricciones_culebra(numero_bloque)'.
+        - Si el contador 'count' alcanza el valor 10, se reinicia a 0.
+
+        Returns:
+            None
+        """
+        
         self.culebra.mov_culebra()
 
         if self.count == self.aleatorio:
@@ -36,19 +55,22 @@ class Main:
         self.restricciones_culebra(numero_bloque)
 
         if self.count == 10:
-            self.count = 0 
+            self.count = 0
 
-    
-    def dibujar_elementos(self, bloque_tamano:int, pantalla:object):
+
+    def dibujar_elementos(self, bloque_tamano:int, pantalla:object) -> None:
         """
         Esta función se encarga de dibujar la culebra y 
         la manzana en la pantalla
 
-        args:
+        Args:
         numero_bloque: int. Cantidad de bloques que hay en la matriz.
         pantalla: object. Pantalla donde serán dibujados los elementos.
+
+        Returns:
+        None
         """
-        # Dibujar la manzana
+        # Dibujar la manzana sólo si cumple las condiciones
         if self.manzana.visible:
             self.manzana.dibujar_manzana(bloque_tamano, pantalla)
         # Dibujar la culebra
@@ -56,24 +78,41 @@ class Main:
 
 
     def encuentro(self):
-        """Funcion que revisa si hay colisión entre la posición
-        de la manzana y la cabeza de la culebra. Si esto ocurre
-        aparece una nueva manzana y a la culebra crece en tamaño"""
+        """
+        Función que verifica si hay una colisión entre la posición de la manzana y la cabeza de la culebra.
+        Si hay una colisión, se "genera" una nueva manzana y la culebra crece en tamaño.
+
+        Esta función se llama en el bucle principal del juego para verificar si la cabeza de la culebra
+        ha alcanzado la posición de la manzana. Si la colisión ocurre, se realiza lo siguiente:
+        - La manzana actual se vuelve invisible (se desaparece).
+        - La culebra crece en tamaño llamando a la función 'agregar_bloque()' de la culebra.
+        - Se genera una nueva posición para la manzana utilizando la función 'desplazar()' de la manzana.
+
+        Además, la función se asegura de que no aparezca una manzana en el cuerpo de la culebra.
+        Si la posición de la manzana coincide con alguna posición en el cuerpo de la culebra (excepto la cabeza),
+        la manzana se vuelve invisible y se genera una nueva posición para evitar la colisión.
+
+        Returns:
+            None
+
+        """
 
         if self.manzana.pos == self.culebra.cuerpo[0]:
+            # Desaparece la manzana
             self.manzana.visible = False
             self.culebra.agregar_bloque()
-            self.manzana.aparecer(numero_bloque)
+            # Crece la culebra
+            self.manzana.desplazar(numero_bloque)
                 
         # Se asegura que nunca aparezca una manzana en el cuerpo
         # de la culebra
         for bloque in self.culebra.cuerpo[1:]:
             if bloque == self.manzana.pos:
                 self.manzana.visible = False
-                self.manzana.aparecer(numero_bloque)
+                self.manzana.desplazar(numero_bloque)
 
 
-    def restricciones_culebra(self, numero_bloque):
+    def restricciones_culebra(self, numero_bloque) -> None:
         """
         Esta función se encarga de delimitar los movimientos de la
         culebra en la pantalla.
@@ -96,16 +135,60 @@ class Main:
                 self.juego_terminado()
                 
 
-    def juego_terminado(self):
+    def juego_terminado(self) -> None:
+        """
+        Función encargada de reposicionar a la culebra en el punto inicial.
+        Da la ilusión de que el juego se terminó
+
+        """
         self.culebra.reset()
-         
-
-    def generar_cont_ale(self):
-        self.aleatorio = random.randint(0,10)
 
 
-    def intro(self, tamano_bloque, numero_bloque):
-        
+    def generar_cont_ale(self) -> None:
+        """
+        Genera un número aleatorio.
+
+        Se usa para comparar que la manzana salga en una
+        cantidad aleatoria de movimientos de la culebra.
+
+        """
+        self.aleatorio = random.randint(1,10)
+
+
+    def intro(self, tamano_bloque, numero_bloque) -> None:
+        """
+        Pantalla de inicio del juego.
+
+        Esta función representa la pantalla inicial del juego, que se muestra en el bucle
+        principal del juego. Muestra el título del juego, instrucciones para jugar y espera
+        a que el jugador presione la tecla Enter para comenzar a jugar.
+
+        Args:
+            tamano_bloque (int): El tamaño de un bloque en píxeles.
+            numero_bloque (int): El número de bloques en el tablero.
+
+        Returns:
+            None
+
+        En esta función, se realiza lo siguiente:
+        - Se crea una ventana con un título, basada en el tamaño de bloque y el número de bloques.
+        - Se configuran las fuentes y colores utilizados para el texto.
+        - Se crea el texto del título "LA CULEBRITA", las instrucciones y el mensaje de
+        "PRESIONE ENTER PARA JUGAR" utilizando las fuentes y colores definidos.
+        - Se calculan las posiciones centradas para los textos en la pantalla.
+        - Se verifica si se ha recibido un evento de cierre de la ventana (pygame.QUIT) o si
+        se ha presionado la tecla Enter (pygame.K_RETURN) para cambiar el estado del juego
+        a "main_game".
+
+        Si el estado del juego es "intro", se realiza lo siguiente:
+        - Se llena la pantalla con un color negro (RGB: 0, 0, 0).
+        - Se dibujan los textos en la pantalla en las posiciones calculadas.
+        - Se actualiza la pantalla con los cambios realizados.
+
+        La función no devuelve ningún valor, ya que su objetivo es mostrar la pantalla de
+        inicio y cambiar el estado del juego cuando el jugador presiona Enter.
+
+        """
         size = [tamano_bloque * numero_bloque,
                 tamano_bloque * numero_bloque]
                 # Configurar la fuente y el color
@@ -144,7 +227,39 @@ class Main:
                 pygame.display.flip()
 
 
-    def main_game_screen(self):
+    def main_game_screen(self) -> None:
+        """
+        Dibuja todos los elementos del juego en la pantalla.
+
+        
+        Esta función se encarga de dibujar todos los elementos del juego en la pantalla,
+        incluyendo la culebra y la manzana. También maneja eventos de cierre
+        de la ventana y eventos de teclado para cambiar la dirección de la culebra.
+
+        - Si el estado del juego es "main_game", se realiza lo siguiente:
+        - Se verifica si se ha recibido un evento de cierre de la ventana (pygame.QUIT),
+            en cuyo caso se cierra el juego.
+        - Si se recibe un evento personalizado ACTUALIZAR_SCREEN, se llama a la función
+            'actualizar()' del juego principal y se incrementa el contador 'count'.
+        - Si se recibe un evento de teclado (pygame.KEYDOWN), se verifica qué tecla se ha
+            presionado y se cambia la dirección de la culebra según la tecla:
+            - Tecla 'W' (pygame.K_w): Mueve la culebra hacia arriba, si no se estaba moviendo
+            hacia abajo previamente.
+            - Tecla 'A' (pygame.K_a): Mueve la culebra hacia la izquierda, si no se estaba
+            moviendo hacia la derecha previamente.
+            - Tecla 'D' (pygame.K_d): Mueve la culebra hacia la derecha, si no se estaba
+            moviendo hacia la izquierda previamente.
+            - Tecla 'S' (pygame.K_s): Mueve la culebra hacia abajo, si no se estaba moviendo
+            hacia arriba previamente.
+
+        - Luego, se llena la pantalla con un color de fondo (RGB: 255, 250, 205).
+        - Se dibujan los elementos del juego llamando a la función 'dibujar_elementos()' del
+        juego principal (main_game).
+        - Se imprime en la consola el valor del contador 'count' y el valor aleatorio generado.
+
+        Finalmente, se actualiza la pantalla con los cambios realizados. 
+        
+        """
         # dibujar todos los elementos
         if self.estado == "main_game":
             for event in pygame.event.get():
@@ -156,6 +271,7 @@ class Main:
                 # Mover la culebra automáticamente
                 if event.type == ACTUALIZAR_SCREEN:
                     main_game.actualizar()
+                    main_game.count += 1
                 # Según el input, modificar dirección
                 if event.type == pygame.KEYDOWN:
                     # Hacia arriba
@@ -165,14 +281,12 @@ class Main:
                         # permitir el cambio de dirección hacia arriba
                         if main_game.culebra.direccion.y != 1:
                             main_game.culebra.direccion = Vector2(0, -1)
-                            main_game.count += 1
                     # Hacia la izquierda
                     if event.key == pygame.K_a:
                         # Si la culebra está yendo hacia la derecha
                         # que no pueda devolverse en ella misma
                         if main_game.culebra.direccion.x != 1:
                             main_game.culebra.direccion = Vector2(-1, 0)
-                            main_game.count += 1
                             
                     # Hacia la derecha
                     if event.key == pygame.K_d:
@@ -180,7 +294,6 @@ class Main:
                         # que no pueda devolverse en ella misma
                         if main_game.culebra.direccion.x != -1:
                             main_game.culebra.direccion = Vector2(1, 0)
-                            main_game.count += 1
                     # Hacia abajo
                     if event.key == pygame.K_s:
                         # Revisa que previamente la culebra no se
@@ -188,12 +301,11 @@ class Main:
                         # permitir el cambio de dirección hacia abajo
                         if main_game.culebra.direccion.y != -1:
                             main_game.culebra.direccion = Vector2(0, 1)
-                            main_game.count += 1
             # Color del fondo
             screen.fill((255, 250, 205))
             # Dibujar la manzan y culebra
             main_game.dibujar_elementos(tamano_bloque, screen)
-
+    
             pygame.display.update()
     
 
